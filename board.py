@@ -1,6 +1,6 @@
 import numpy as np
-from __future__ import division
-import properties
+from itertools import compress
+import math
 
 np.zeros(shape=(9, 9))
 
@@ -42,39 +42,50 @@ class Sudoku:
 class Solver(Sudoku):
     def __init__(self):
         self.puzzle = self.make_puzzle
+        values = list(range(1, 10))
+
         pass
 
 
-    def find_first_zero(self):
+    def find_empty_cells(self):
         field = self.make_puzzle
-        field = field.flatten()
+        select = field.flatten() == 0
+        index_list = list(compress(list(range(81)), select))
 
-        for i, x in enumerate(field):
-            if x == 0:
-                return i
-
-
-    def get_vertical(self, element):
-        vertical_array = puzzle[:,1]
+        return index_list
 
 
-    def get_horizontal(self, self, element):
-        return horizontal_array
+    def check_horizontal(self, element, puzzle):
+        puzzle = puzzle.reshape((9, 9))
+        index_row = math.floor(element/9)
+        check_row = list(puzzle[index_row ,:])
+        check_row = list(filter(lambda a: a != 0, check_row))
 
-    def get_block_array(self):
-        pass
+        if len(check_row) == len(set(check_row)):
+            return True
+        else:
+            return False
 
-
-
-
-
-
-    def backtracking(self):
-        element = self.find_first_zero()
-        print(element)
+    def check_
 
 
+    def validate(self, element, candidate_value, puzzle):
+        tmp_puzzle = puzzle.flatten()
+        np.put(tmp_puzzle, [element], [candidate_value])
+        bool_hor = self.check_horizontal(element, puzzle)
+        bool_vert =
 
 
 
 
+    def back_tracking(self):
+
+
+        dict_res = {}
+        values = list(range(1, 10))
+        candidates = self.find_empty_cells()
+        validate(element, candidate_value, puzzle)
+
+
+if __name__ == '__main__':
+    Solver().back_tracking()

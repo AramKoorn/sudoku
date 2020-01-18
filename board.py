@@ -44,7 +44,6 @@ class Sudoku:
 class Solver(Sudoku):
     def __init__(self):
         self.puzzle = self.make_puzzle
-        values = list(range(1, 10))
 
         pass
 
@@ -115,13 +114,18 @@ class Solver(Sudoku):
 
     def back_tracking(self):
 
-
-        dict_res = {}
         values = list(range(1, 10))
         candidates = self.find_empty_cells()
-        element = 1
-        candidate_value = 1
-        bool_insert = self.validate(element, candidate_value, self.puzzle)
+        dict_input = {x: [] for x in candidates}
+
+        puzzle_solved = False
+        while puzzle_solved:
+
+            sort_dict = {key: v for key, v in dict_input.items() if v == []}
+            element =
+            element = 1
+            candidate_value = 1
+            bool_insert = self.validate(element, candidate_value, self.puzzle)
 
 
 if __name__ == '__main__':

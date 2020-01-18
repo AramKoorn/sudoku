@@ -1,3 +1,5 @@
+__author__ = ' Aram'
+
 import numpy as np
 from itertools import compress
 import math
@@ -66,16 +68,49 @@ class Solver(Sudoku):
         else:
             return False
 
-    def check_
+
+    def check_vertical(self, element, puzzle):
+
+        if element < 9:
+            index_column = element
+        else:
+            index_column = element % 9
+
+        check_vertical = list(puzzle[:, index_column])
+        check_vertical = list(filter(lambda a: a != 0, check_vertical))
+
+        if len(check_vertical) == len(set(check_vertical)):
+            return True
+        else:
+            return False
+
+
+    def check_block(self, element, puzzle):
+        dict_grid = self.make_grid_dict
+        first_letter = dict_grid[element].split()[0][0]
+        dict_grid_rev = dict(zip(dict_grid.values(), dict_grid.keys()))
+        k = [k for k in dict_grid_rev.keys() if k.startswith(first_letter)]
+        check_block = list({key: dict_grid_rev[key] for key in k}.values())
+        check_block = puzzle.flatten()[check_block]
+        check_block = list(filter(lambda a: a != 0, check_block))
+
+        if len(check_block) == len(set(check_block)):
+            return True
+        else:
+            return False
 
 
     def validate(self, element, candidate_value, puzzle):
         tmp_puzzle = puzzle.flatten()
         np.put(tmp_puzzle, [element], [candidate_value])
         bool_hor = self.check_horizontal(element, puzzle)
-        bool_vert =
+        bool_vert = self.check_vertical(element, puzzle)
+        bool_block = self.check_block(element, puzzle)
 
-
+        if all([bool_hor, bool_vert, bool_block]):
+            return True
+        else:
+            return False
 
 
     def back_tracking(self):
@@ -84,7 +119,9 @@ class Solver(Sudoku):
         dict_res = {}
         values = list(range(1, 10))
         candidates = self.find_empty_cells()
-        validate(element, candidate_value, puzzle)
+        element = 1
+        candidate_value = 1
+        bool_insert = self.validate(element, candidate_value, self.puzzle)
 
 
 if __name__ == '__main__':

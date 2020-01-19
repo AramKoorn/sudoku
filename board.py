@@ -69,7 +69,7 @@ class Solver(Sudoku):
 
 
     def check_vertical(self, element, puzzle):
-
+        puzzle = puzzle.reshape((9, 9))
         if element < 9:
             index_column = element
         else:
@@ -102,9 +102,9 @@ class Solver(Sudoku):
     def validate(self, element, candidate_value, puzzle):
         tmp_puzzle = puzzle.flatten()
         np.put(tmp_puzzle, [element], [candidate_value])
-        bool_hor = self.check_horizontal(element, puzzle)
-        bool_vert = self.check_vertical(element, puzzle)
-        bool_block = self.check_block(element, puzzle)
+        bool_hor = self.check_horizontal(element, tmp_puzzle)
+        bool_vert = self.check_vertical(element, tmp_puzzle)
+        bool_block = self.check_block(element, tmp_puzzle)
 
         if all([bool_hor, bool_vert, bool_block]):
             return True
@@ -117,15 +117,37 @@ class Solver(Sudoku):
         values = list(range(1, 10))
         candidates = self.find_empty_cells()
         dict_input = {x: [] for x in candidates}
+        order = list(dict_input.keys())
+        puzzle = self.puzzle
 
-        puzzle_solved = False
-        while puzzle_solved:
+        start_index = 0
+        while 1 != 2:
+            #print(f'{puzzle}')
+            if all(puzzle.flatten() != 0):
+                print(f'Puzzle is solved! \n {puzzle}')
+                break
 
-            sort_dict = {key: v for key, v in dict_input.items() if v == []}
-            element =
-            element = 1
-            candidate_value = 1
-            bool_insert = self.validate(element, candidate_value, self.puzzle)
+            element = order[start_index]
+            list_candidates = list(set(values) - set(dict_input[element]))
+            last_value = list_candidates[-1]
+            for i, candidate in enumerate(list_candidates):
+
+                bool_insert = self.validate(element, candidate, puzzle)
+
+                if bool_insert:
+                    list_key = dict_input[element]
+                    list_key.append(candidate)
+                    puzzle = puzzle.flatten()
+                    np.put(puzzle, [element], [candidate])
+                    puzzle = puzzle.reshape((9, 9))
+                    start_index += 1
+                    break
+
+                if candidate == last_value:
+                    dict_input[element] = []
+                    np.put(puzzle, [element], [0])
+                    start_index = start_index - 1
+
 
 
 if __name__ == '__main__':

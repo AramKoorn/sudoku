@@ -1,2 +1,2 @@
 # sudoku
-Write a sudoku solver with only the python builtin functions and numpy
+Sudoku solver for a pre-programmed sudoku puzzle. run board.py to solve the puzzle. 
